@@ -4,6 +4,7 @@ const app = express();
 require("dotenv").config();
 const mongoose = require("mongoose");
 const session = require('express-session');
+const methodOverride = require('method-override');
 
 // Database Configuration
 mongoose.connect(process.env.DATABASE_URL, {
@@ -18,6 +19,7 @@ db.on("connected", () => console.log("mongo connected"));
 db.on("disconnected", () => console.log("mongo disconnected"));
 
 // Middleware
+app.use(methodOverride('_method'));
 // Body parser middleware: give us access to req.body
 app.use(express.urlencoded({ extended: true }));
 // Routes / Controllers
@@ -37,9 +39,20 @@ app.use(
 const sessionsController = require("./controllers/sessions");
 app.use("/sessions", sessionsController);
 
+//we want to render the index view IF the user is logged out and we want to render
+//the dashboard view IF the user is logged in
 app.get("/", (req, res) => {
-    res.render("index.ejs");
+    if (req.session.currentUser) {
+        res.render('dashboard.ejs', {
+            currentUser: req.session.currentUser
+        });
+    } else {
+        res.render("index.ejs", {
+            currentUser: req.session.currentUser
+        });
+    }
 });
+
 
 
 
