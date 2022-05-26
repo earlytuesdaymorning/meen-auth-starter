@@ -32,6 +32,13 @@ app.use(
     }));
 
 
+
+// Routes / Controllers
+const sessionsController = require("./controllers/sessions");
+app.use("/sessions", sessionsController);
+
+
+
 // Listener
 const PORT = process.env.PORT;
 app.listen(PORT, () => console.log(`server is listening on port ${PORT}`));
