@@ -37,6 +37,10 @@ app.use(
 const sessionsController = require("./controllers/sessions");
 app.use("/sessions", sessionsController);
 
+app.get("/", (req, res) => {
+    res.render("index.ejs");
+});
+
 
 
 // Listener
